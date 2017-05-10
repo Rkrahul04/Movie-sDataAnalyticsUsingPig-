@@ -1,0 +1,30 @@
+Scripts for above problem statements: 
+ 
+Loading of dataset into movies relation:  
+load '/movies.csv' using PigStorage(',') as (id:int,name:chararray,year:int,rating:double,duration:int); 
+
+Finding movies between 1950 and 1960: 
+movies_released_between_1950_1960 = filter movies by year >1950 and year < 1960; 
+dump movies_released_between_1950_1960; 
+
+Finding movies with rating between 3 and 4: 
+movies_rating_3_4 =  filter movies by rating >3.0 and rating <4.0; 
+dump movies_rating_3_4; 
+
+Finding movies with duration greater than 2 hours(7200 second):  
+duration_2_hours_plus = filter movies by duration > 7200; 
+dump duration_2_hours_plus; 
+
+Finding year and number of movies released in that year: 
+grouped_by_year = group movies by year; 
+count_by_years = foreach grouped_by_year generate group,COUNT(movies.id); 
+dump count_by_years; 
+
+Finding the total number of movies released: 
+group count_by_years ALL; 
+sum_all = foreach group_by_all generate SUM(count_by_years . $1); 
+dump sum_all; 
+
+Finding some percentage of movies out of total:  
+sample_20_percent = sample movies 0.2; 
+dump sample_20_percent; 
